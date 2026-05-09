@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: "2026-05-09T14:30:28Z"
+  generation: 1
+  labels:
+    app: do100-multi-version
+  name: do100-multi-version
+  namespace: mario-devops-dev
+  resourceVersion: "7768250963"
+  uid: 9180ec2d-6991-4e66-b00b-4c112752c0eb
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 5
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: do100-multi-version
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: do100-multi-version
+    spec:
+      containers:
+      - image: quay.io/redhattraining/do100-multi-version:v1-external
+        imagePullPolicy: IfNotPresent
+        name: do100-multi-version
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+status: {}

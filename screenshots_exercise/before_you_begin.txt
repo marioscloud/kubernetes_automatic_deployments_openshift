@@ -1,0 +1,20 @@
+Implementing Cloud Deployment
+Strategies
+
+In this exercise you will deploy a managed containerized application in your Kubernetes
+cluster. You will observe how some of Kubernetes' automatic deployments and high
+availability features work.
+
+Outcomes
+You should be able to:
+-Deploy an application container with several replicas.
+-Review the structure of the Deployment resource manifest.
+-Update the application to a new version without losing availability.
+
+Before You Begin
+You need a working Kubernetes cluster, and your kubectl command must be configured to
+communicate with the cluster.
+Make sure your kubectl context refers to a namespace where you have enough
+permissions, usually username-dev or username-stage. Use the kubectl config
+set-context --current --namespace=namespace command to switch to the
+appropriate namespace.
