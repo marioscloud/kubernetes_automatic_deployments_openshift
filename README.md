@@ -1,130 +1,36 @@
-# Kubernetes Automatic Deployment Strategies  
-### Managed Multi‑Replica Node.js Application on Kubernetes / OpenShift
+# ☸️ Kubernetes Automated Deployment & Rollout Strategies
 
-## Overview  
-This project demonstrates how to deploy, update, and manage a multi‑replica containerized application using Kubernetes Deployment strategies. It highlights how Kubernetes ensures high availability, rolling updates, and zero‑downtime version upgrades.
+![Kubernetes](https://img.shields.io/badge/Kubernetes-%23326ce5.svg?style=for-the-badge&logo=kubernetes&logoColor=white)
+![OpenShift](https://img.shields.io/badge/OpenShift-%23EE0000.svg?style=for-the-badge&logo=redhat&logoColor=white)
+![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)
+![Lifecycle Management](https://img.shields.io/badge/App_Lifecycle-Zero_Downtime-success?style=for-the-badge)
 
-The application used is a Node.js demo service (`do100-multi-version`) provided by Red Hat Training.
+> **Enterprise Container Orchestration:** A practical implementation of highly available, multi-replica containerized deployments featuring zero-downtime rolling updates and declarative health checks.
 
----
+## 📖 Executive Summary
 
-## Objectives  
-This project showcases how to:
+This project demonstrates advanced **Application Lifecycle Management (ALM)** on Kubernetes / Red Hat OpenShift. It focuses on how declarative configuration ensures **High Availability (HA)** and resilient infrastructure by automating version upgrades with zero service interruption. 
 
-- Deploy a containerized application with multiple replicas  
-- Inspect and understand a Deployment manifest  
-- Perform a rolling update to a new application version  
-- Add a readiness probe to control rollout behavior  
-- Observe Kubernetes automatically replace old pods with new ones  
-- Clean up resources after deployment  
+By leveraging native Kubernetes `Deployment` controllers and implementing strategic `readinessProbes`, this repository showcases the fundamental DevOps practices required to safely transition distributed microservices from v1.0 to v2.0 in a production-simulated environment.
 
 ---
 
-## Prerequisites  
-Before starting, ensure you have:
+## 🎯 Key DevOps Concepts Demonstrated
 
-- A working Kubernetes or OpenShift cluster  
-- `kubectl` (or `oc`) installed and authenticated  
-- Permissions to deploy into your namespace  
-- A valid Kubernetes context pointing to your working namespace  
+* **Zero-Downtime Upgrades:** Executing `RollingUpdate` strategies to seamlessly transition user traffic between application versions.
+* **Infrastructure Reliability (Health Checks):** Implementing `readinessProbes` to guarantee the ingress controller only routes traffic to healthy, fully initialized containers.
+* **Declarative State Management:** Utilizing Kubernetes controllers to continuously reconcile the desired state (Replica Management & Self-Healing).
+* **Observability:** Monitoring pod lifecycles and rollout status in real-time.
 
-Set your namespace:
+---
 
+## 🛠️ Technology Stack & Prerequisites
+
+* **Orchestration:** Kubernetes or Red Hat OpenShift Cluster
+* **CLI Tools:** `kubectl` (or `oc`)
+* **Application:** Containerized Node.js Microservice (`do100-multi-version`)
+
+**Cluster Preparation:**
+Ensure you are authenticated to your cluster and have set your working namespace:
 ```bash
-kubectl config set-context --current --namespace=<your-namespace>
-1. Deploy the Application (Version 1.0)
-
-Create a Deployment with 5 replicas:
-bash
-kubectl create deployment do100-multi-version \
-  --replicas=5 \
-  --image=quay.io/redhattraining/do100-multi-version:v1-external
-
-Verify pods are running:
-bash
-kubectl get pods
-Check logs to confirm version:
-
-bash
-kubectl logs deploy/do100-multi-version
-Expected output includes:
-
-Code
-do100-multi-version server running version 1.0
-
-2. Update Deployment to Version 2.0 and Add a Readiness Probe
-
-Confirm the Deployment strategy:
-bash
-kubectl describe deploy/do100-multi-version
-
-You should see:
-StrategyType: RollingUpdate
-
-Edit the Deployment:
-bash
-kubectl edit deployment/do100-multi-version
-
-Update:
-Image → v2-external
-Add readiness probe
-
-Example container spec:
-containers:
-- name: do100-multi-version
-  image: quay.io/redhattraining/do100-multi-version:v2-external
-  readinessProbe:
-    httpGet:
-      path: /ready
-      port: 8080
-    initialDelaySeconds: 2
-    timeoutSeconds: 2
-Save and exit.
-
-3. Observe the Rolling Update
-Watch pods as Kubernetes performs the rollout:
-
-bash
-kubectl get pods -w
-You will see:
--New pods created with the new version
--Old pods terminated only after new pods become Ready
-
-Stop watching with Ctrl+C.
-
-Check logs again:
-bash
-kubectl logs deploy/do100-multi-version
-
-Expected output:
-do100-multi-version server running version 2.0
-Cleanup
-
-Delete the Deployment:
-bash
-kubectl delete deploy/do100-multi-version
-Kubernetes automatically removes all associated pods.
-
-Project Structure
-deploy_do100_multi_version.yml	  Deployment manifest used for versioned rollout
-screenshots_exercise/	            Reference screenshots from the guided exercise
-README.md	                        Project documentation
-
-#Key Concepts Demonstrated
-
-RollingUpdate Strategy
-Ensures zero‑downtime upgrades by gradually replacing pods.
-
-Readiness Probes
-Guarantee that traffic is only routed to healthy containers.
-
-Replica Management
-Maintains application availability even during updates.
-
-Declarative Deployment
-Kubernetes continuously reconciles the desired state.
-
-Credits
-This project is based on training materials from:
-Red Hat Training & Certification  
-Managing Cloud‑Native Applications with Kubernetes (DO100)
+kubectl config set-context --current --namespace=<your-target-namespace>
